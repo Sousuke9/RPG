@@ -1,6 +1,11 @@
 //map STORAGE. prob gonna move to diff file later
 let map={
-    1:[{x:0,y:150,h:50,w:300,type:"rect",original:true},{x:-150,y:0,h:300,w:50,type:"rect",original:true},{x:150,y:0,h:300,w:50,type:"rect",original:true},{x:0,y:-150,h:50,w:300,type:"rect",original:true}]
+    1:[
+        {x:0,y:150,h:50,w:300,type:"rect",original:true,collide:true},
+        {x:-150,y:0,h:300,w:50,type:"rect",original:true,collide:true},
+        {x:150,y:0,h:300,w:50,type:"rect",original:true,collide:true},
+        {x:0,y:-150,h:50,w:300,type:"rect",original:true,collide:true}
+    ]
 }
 
 //map rendering and update
@@ -10,7 +15,9 @@ const wOffsetY = 300;
 function mapCollision(id){
     for(let i = 0; i < map[id].length;i++){
         const r=map[id][i];//properties
-        if(r.type=="rect")collision(r,p);
+        if(r.type=="rect"&&r.collide){
+            collision(r,p);
+        }
     }
 }
 function generateMap(id){

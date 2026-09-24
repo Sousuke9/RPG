@@ -18,7 +18,7 @@ let p={//player data
     y:0,
     w:10,
     h:10,
-    speed:0.2,
+    speed:0.16,
     prevX:0,
     prevY:0,
     pX:canvas.width/2,
@@ -32,6 +32,7 @@ window.addEventListener("keyup", (e) => {
 });
 window.addEventListener("keydown", (e) => {
   keys[e.code] = true;
+  keyPressed(e.code);
 });
 
 function loop(timeS) {
@@ -114,3 +115,7 @@ function updPerSec() {//calls every second
 }
 generateMap(p.map);
 requestAnimationFrame(loop);
+
+function keyPressed(key){
+
+}
