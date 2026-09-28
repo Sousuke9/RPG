@@ -8,7 +8,9 @@ let timer = 0;
 let lastTime = 0;
 let keys={};
 let player;
-
+//load imgs
+let imgs={xavi:new Image()};
+imgs.xavi.src = "images/xavi.jpg"
 //canvas 4:3 aspect ratio
 canvas.width=800;
 canvas.height =600;

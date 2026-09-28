@@ -19,13 +19,20 @@ function mapCollision(id){
             collision(r,p);
         }
     }
-}
+};
 function generateMap(id){
+    if(!imgs.xavi.complete)return;
 //console.log(JSON.stringify(map[id][0]))
     for(let i = 0; i < map[id].length;i++){
         const r=map[id][i];//properties
         if(r.type=="rect"){
-            ctx.fillStyle = "#4c4f4c"
+           // ctx.fillStyle = "#4c4f4c"
+            let fill = ctx.createPattern(imgs.xavi, 'repeat');
+                let matrix = new DOMMatrix();
+        matrix = matrix.translate((-(-r.x+p.x)+wOffsetX), (-(r.y+p.y)+wOffsetY));
+         matrix = matrix.scale(0.03, 0.03); 
+        fill.setTransform(matrix);
+        ctx.fillStyle = fill;
             ctx.fillRect((-(-r.x+p.x)+wOffsetX)-(r.w/2),(-(r.y+p.y)+wOffsetY)-r.h/2,r.w,r.h);
             
         }
@@ -63,8 +70,9 @@ if(Math.abs(minX)>Math.abs(minY)){
 }
     */
 //}
-}
 
+}
+/*
 function collisionSquare(obj1,obj2){
 return Math.abs(obj2.x-obj1.x)<(obj1.w+obj2.w)/2&&Math.abs(obj2.y-obj1.y)<(obj1.h+obj2.h)/2;
 }
@@ -82,4 +90,4 @@ function getAngle(obj1,obj2){
     //found code online hahahhaha
     let angle = Math.atan2(obj1.y - obj2.y, obj1.x - obj2.x) + Math.PI;
     return angle > Math.PI ? angle - 2 * Math.PI : angle;
-}
+}*/
