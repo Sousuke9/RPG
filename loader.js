@@ -1,4 +1,5 @@
 //LOADERS. currently only used to load images.
+
 class AssetLoader{
     constructor(){
         this.assets = {};
@@ -28,7 +29,3 @@ return this.assets;
 }
 }
 
-/*const loader = new AssetLoader();
-const imgs = await loader.loader({
-    xavi: "images/xavi.jpg"
-});*/

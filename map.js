@@ -8,7 +8,19 @@ let map={
     ]
 }
 
+//img loader
+let imgGroup= null
+async function imgLoader(id){
+const loader = new AssetLoader();
+globalThis.imgs = await loader.loader({
+    xavi: "images/xavi.jpg"
+});
+imgGroup = id;
+console.log(id)
+
+}
 //map rendering and update
+
 
 const wOffsetX = 400;
 const wOffsetY = 300;
@@ -21,7 +33,8 @@ function mapCollision(id){
     }
 };
 function generateMap(id){
-    if(!imgs.xavi.complete)return;
+    if(imgGroup!==id&&!imgGroup)imgLoader(id); //load assets if not loaded yet
+    if(!imgGroup)return;
 //console.log(JSON.stringify(map[id][0]))
     for(let i = 0; i < map[id].length;i++){
         const r=map[id][i];//properties
@@ -48,7 +61,7 @@ let dx = obj1.x - obj2.x;
 let dy = obj1.y - obj2.y;
 let ox = (obj2.w+obj1.w)/2 - Math.abs(dx);
 let oy = (obj1.h+obj2.h)/2 - Math.abs(dy);
-console.log(ox)
+//console.log(ox)
 if(ox>0&&oy>0){
 if(ox<oy){
     p.x-=dx>0?ox:-ox;

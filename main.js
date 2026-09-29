@@ -8,9 +8,6 @@ let timer = 0;
 let lastTime = 0;
 let keys={};
 let player;
-//load imgs
-let imgs={xavi:new Image()};
-imgs.xavi.src = "images/xavi.jpg"
 //canvas 4:3 aspect ratio
 canvas.width=800;
 canvas.height =600;
@@ -30,7 +27,7 @@ let p={//player data
 
 window.addEventListener("keyup", (e) => {
   keys[e.code] = false;
-  console.log(e.code)
+ // console.log(e.code)
 });
 window.addEventListener("keydown", (e) => {
   keys[e.code] = true;
@@ -107,6 +104,7 @@ function draw(deltaTime) {//all the canvas draw handling
 
 //map generation (map.js)
 generateMap(p.map);
+//console.log(p.map);
 
 //player
   ctx.fillStyle="#00ff00"
