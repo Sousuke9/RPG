@@ -8,6 +8,8 @@ let timer = 0;
 let lastTime = 0;
 let keys={};
 let player;
+let timedUI= {};
+let textTotalId =0;
 //canvas 4:3 aspect ratio
 canvas.width=800;
 canvas.height =600;
@@ -118,4 +120,32 @@ requestAnimationFrame(loop);
 
 function keyPressed(key){
 
+}
+
+function uiHandler(deltaTime){
+  for (let i = 0; i < timedUI.length; i++) {
+    const ui = timedUI[i];
+    ui.timeLeft -= deltaTime / 1000;
+    if (typeof ui.timeLeft!=='string'&&ui.timeLeft <= 0) {
+      timedUI.splice(i, 1);
+      i--; //adjust index after removal of ones which is out of time.
+    }else{
+      ctx.font = `${ui.size}px ${ui.font}`;
+      ctx.fillStyle = ui.color;
+      ctx.textAlign = "center";
+      ctx.fillText(ui.text, ui.x, ui.y);
+    }
+  }
+}
+function addText(id,text,x,y,config={}){
+  timedUI.push({
+        id: id,
+        text: text,
+        x: x,
+        y: y,
+        size: config.size || 20,
+        color: config.color || "#ffffff",
+        font: config.font || "sans-serif",
+        timeLeft: config.timeLeft || 5
+    });
 }

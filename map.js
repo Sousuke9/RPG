@@ -9,13 +9,14 @@ let map={
 }
 
 //img loader
-let imgGroup= null
-async function imgLoader(id){
+let mapLoad= null
+async function setUpMap(id){
 const loader = new AssetLoader();
 globalThis.imgs = await loader.loader({
     xavi: "images/xavi.jpg"
 });
-imgGroup = id;
+globalThis.activeColliders = map[id].filter(r => r.collide);
+mapLoad = id;
 console.log(id)
 
 }
@@ -25,16 +26,17 @@ console.log(id)
 const wOffsetX = 400;
 const wOffsetY = 300;
 function mapCollision(id){
-    for(let i = 0; i < map[id].length;i++){
-        const r=map[id][i];//properties
+    if(!mapLoad)return;
+    for(let i = 0; i < activeColliders.length;i++){
+        const r=activeColliders[i];//properties
         if(r.type=="rect"&&r.collide){
             collision(r,p);
         }
     }
 };
 function generateMap(id){
-    if(imgGroup!==id&&!imgGroup)imgLoader(id); //load assets if not loaded yet
-    if(!imgGroup)return;
+    if(mapLoad!==id&&!mapLoad)setUpMap(id); //load assets if not loaded yet
+    if(!mapLoad)return;
 //console.log(JSON.stringify(map[id][0]))
     for(let i = 0; i < map[id].length;i++){
         const r=map[id][i];//properties
