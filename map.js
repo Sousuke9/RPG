@@ -1,10 +1,12 @@
 //map STORAGE. prob gonna move to diff file later
 let map={
     1:[
-        {x:0,y:150,h:50,w:300,type:"rect",original:true,collide:true},
-        {x:-150,y:0,h:300,w:50,type:"rect",original:true,collide:true},
-        {x:150,y:0,h:300,w:50,type:"rect",original:true,collide:true},
-        {x:0,y:-150,h:50,w:300,type:"rect",original:true,collide:true}
+        {x:0,y:0,h:250,w:250,type:"rect",original:true,collide:false,visible:true},
+        {x:0,y:150,h:50,w:300,type:"rect",original:true,collide:true,visible:false},
+        {x:-150,y:0,h:300,w:50,type:"rect",original:true,collide:true,visible:false},
+        {x:150,y:0,h:300,w:50,type:"rect",original:true,collide:true,visible:false},
+        {x:0,y:-150,h:50,w:300,type:"rect",original:true,collide:true,visible:false},
+        
     ]
 }
 
@@ -16,6 +18,7 @@ globalThis.imgs = await loader.loader({
     xavi: "images/xavi.jpg"
 });
 globalThis.activeColliders = map[id].filter(r => r.collide);
+globalThis.visibleMap = map[id].filter(r => r.visible);
 mapLoad = id;
 console.log(id)
 
@@ -26,7 +29,7 @@ console.log(id)
 const wOffsetX = 400;
 const wOffsetY = 300;
 function mapCollision(id){
-    if(!mapLoad)return;
+    if(!mapLoad)return;//checks if asset is loaded
     for(let i = 0; i < activeColliders.length;i++){
         const r=activeColliders[i];//properties
         if(r.type=="rect"&&r.collide){
@@ -38,8 +41,8 @@ function generateMap(id){
     if(mapLoad!==id&&!mapLoad)setUpMap(id); //load assets if not loaded yet
     if(!mapLoad)return;
 //console.log(JSON.stringify(map[id][0]))
-    for(let i = 0; i < map[id].length;i++){
-        const r=map[id][i];//properties
+    for(let i = 0; i < visibleMap.length;i++){
+        const r=visibleMap[i];//properties
         if(r.type=="rect"){
            // ctx.fillStyle = "#4c4f4c"
             let fill = ctx.createPattern(imgs.xavi, 'repeat');
@@ -55,6 +58,7 @@ function generateMap(id){
 }
 
 function collision(obj1,ob2){//itm = wall. obj2 = player
+let innerCollision = null;
 let obj2 = structuredClone(ob2);
 obj2.y = -obj2.y
 //let obj1 = structuredClone(ob1);
@@ -71,6 +75,7 @@ if(ox<oy){
     p.y+=dy>0?oy:-oy;
 }
 }
+
 /*
 console.log("overlaps1: "+overlapsY1);
 console.log("overlaps2: "+overlapsY2);
