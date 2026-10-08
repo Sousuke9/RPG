@@ -10,6 +10,7 @@ let keys={};
 let player;
 let timedUI= {};
 let textTotalId =0;
+let wallCollided = false;
 //canvas 4:3 aspect ratio
 canvas.width=800;
 canvas.height =600;
@@ -56,10 +57,10 @@ function loop(timeS) {
 }
 
 function upd(deltaTime) {
-
   //player
   playerControls(deltaTime);
-  mapCollision(p.map)
+  mapCollision(p.map);//map collision
+  
 
 }
 function playerControls(deltaTime){//keybinds / player controls
@@ -82,8 +83,22 @@ if(onX!==0||onY!==0){
  let length = Math.sqrt(onX*onX + onY*onY);
 onX/=length;
 onY/=length;
-  p.x+=onX*p.speed*deltaTime;
-  p.y+=onY*p.speed*deltaTime;
+let xMovement = onX * p.speed * deltaTime;
+let yMovement = onY * p.speed * deltaTime;
+let xWall = mapAABB(p.x + xMovement, p.y, p.w, p.h, activeMapColliders);
+let yWall = mapAABB(p.x, p.y + yMovement, p.w, p.h, activeMapColliders);
+if(!xWall) {
+p.x+=xMovement;
+}
+ // while(mapCollision(p.map)){
+  //  p.x-=onX*p.speed*deltaTime*0.1;
+  // }
+  if(!yWall) {
+    p.y+=yMovement;
+  }
+  // while(mapCollision(p.map)){
+  //  p.y-=onY*p.speed*deltaTime*0.1;
+  // }
 }
 
   if(keys["KeyQ"]){
