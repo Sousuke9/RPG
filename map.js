@@ -1,9 +1,11 @@
 //maybe change to collision system where u detect if its touching colliders than just reversing the velocity by while true and smaller value. 
 //map STORAGE. prob gonna move to diff file later
+
+//development paessed for awhile cause busy.
 let map={//o=collision type
     1:[
-        {x:0,y:0,h:250,w:250,type:"rect",collide:false,visible:true,t:"purple"},
-        {x:0,y:150,h:50,w:300,type:"rect",original:true,collide:true,visible:false,t:"purple",o:"normal"},
+        {x:0,y:0,h:2500,w:2500,type:"rect",collide:false,visible:true,t:"purple"},
+        {x:0,y:150,h:50,w:30,type:"rect",original:true,collide:true,visible:true,t:"purple",o:"normal"},
         {x:-150,y:0,h:300,w:50,type:"rect",original:true,collide:true,visible:false,t:"purple",o:"normal"},
         {x:150,y:0,h:300,w:50,type:"rect",original:true,collide:true,visible:false,t:"purple",o:"normal"},
         {x:0,y:-150,h:50,w:300,type:"rect",original:true,collide:true,visible:false,t:"purple",o:"normal"},
@@ -105,7 +107,7 @@ if(map[id][i].visible&&map[id][i].t){
 }}
 }
 
-class Grid {//basic spatial grid thingy to make it way efficient for collision.
+class Grid {//basic spatial hash grid thingy to make it way efficient for collision.
     constructor(cellSize) { //cellSize=size per cell in pixel.
         this.cellSize = cellSize;
         this.cells = new Map();

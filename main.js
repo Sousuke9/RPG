@@ -18,15 +18,22 @@ canvas.height =600;
 let p={//player data
     x:0,
     y:0,
-    w:10,
-    h:10,
+    w:27,
+    h:27,
     speed:0.16,
     prevX:0,
     prevY:0,
     pX:canvas.width/2,
     pY:canvas.height/2,
-    map:1
+    map:1,
+    anim:new Image(),
+    state:"idle",
+    dir:"idle",
+    frame:0,
+    totalFrames:7,
+    fps:10
 };
+p.anim.src="images/playerAnimSpritesheet.png";
 
 window.addEventListener("keyup", (e) => {
   keys[e.code] = false;
@@ -37,27 +44,13 @@ window.addEventListener("keydown", (e) => {
   keyPressed(e.code);
 });
 
-function loop(timeS) {
-  const deltaTime = timeS - lastTime;
-  lastTime = timeS;
-
-  timer += deltaTime;
-  
-  if (timer >= 1000) {//calls per second
-    timer -= 1000;
-    if(timer>=500)timer=0; //check if timer gone too large
-    updPerSec(deltaTime);
-    if (deltaTime > 0) fps = Math.round(1000 / deltaTime);//fps calc
-  }
-
-  upd(deltaTime);
-  draw(deltaTime)
-  
-  requestAnimationFrame(loop);
-}
 
 function upd(deltaTime) {
   //player
+  if(p.state=="walk"){
+    p.frame = (p.frame + (p.fps * deltaTime) / 1000) % p.totalFrames;
+  }else if(p.state=="idle"&&p.frame>0){
+  p.frame=6;}
   playerControls(deltaTime);
   mapCollision(p.map);//map collision
   
@@ -80,6 +73,7 @@ function playerControls(deltaTime){//keybinds / player controls
 }
 
 if(onX!==0||onY!==0){
+  p.state="walk";
  let length = Math.sqrt(onX*onX + onY*onY);
 onX/=length;
 onY/=length;
@@ -99,6 +93,8 @@ p.x+=xMovement;
   // while(mapCollision(p.map)){
   //  p.y-=onY*p.speed*deltaTime*0.1;
   // }
+}else{
+  p.state="idle";
 }
 
   if(keys["KeyQ"]){
@@ -112,26 +108,26 @@ function draw(deltaTime) {//all the canvas draw handling
   ctx.fillStyle = "#28262667";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
+
+//map generation (map.js)
+generateMap(p.map);
+//console.log(p.map);
+//ui
   ctx.font = "24px serif";
   ctx.fillStyle = "#fff";
   ctx.textAlign = "left";
   ctx.fillText("fps: " + fps, 10, 24);
    ctx.fillText(Math.round(p.x)+" ," +-Math.round( p.y), 10, 48);
-
-
-//map generation (map.js)
-generateMap(p.map);
-//console.log(p.map);
-
 //player
-  ctx.fillStyle="#00ff00"
-  player=ctx.fillRect(p.pX-(p.w/2),p.pY-(p.h/2),p.w,p.h);
+
+  if(!p.anim.complete)return;
+
+  player=ctx.drawImage(p.anim, Math.floor(p.frame)*16,0,16, 16, p.pX,p.pY, p.w+3, p.h+3);
+
 }
 function updPerSec() {//calls every second
 
 }
-generateMap(p.map);
-requestAnimationFrame(loop);
 
 function keyPressed(key){
 
@@ -152,7 +148,7 @@ function uiHandler(deltaTime){
     }
   }
 }
-function addText(id,text,x,y,config={}){
+function addText(id,text,x,y,config={}){//add text to screen
   timedUI.push({
         id: id,
         text: text,
@@ -164,3 +160,30 @@ function addText(id,text,x,y,config={}){
         timeLeft: config.timeLeft || 5
     });
 }
+
+function loop(timeS) {
+  const deltaTime = timeS - lastTime;
+  lastTime = timeS;
+
+  timer += deltaTime;
+  
+  if (timer >= 1000) {//calls per second
+    timer -= 1000;
+    if(timer>=500)timer=0; //check if timer gone too large
+    updPerSec(deltaTime);
+    if (deltaTime > 0) fps = Math.round(1000 / deltaTime);//fps calc
+  }
+
+  upd(deltaTime);
+  draw(deltaTime)
+  
+  requestAnimationFrame(loop);
+}
+
+
+
+
+
+//codes above this
+generateMap(p.map);
+requestAnimationFrame(loop);
